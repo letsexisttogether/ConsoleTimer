@@ -4,7 +4,7 @@
 #include "OutputColorizer/Colorizer.hpp"
 #include "Timer/Timer.hpp"
 
-using namespace std::chrono_literals;
+void FocusOnWindow() noexcept;
 
 std::int32_t main(std::int32_t argc, char** argv)
 {
@@ -52,7 +52,19 @@ std::int32_t main(std::int32_t argc, char** argv)
 
     }
 
+    FocusOnWindow();
     std::cout << StandardColorizer;
 
     return EXIT_SUCCESS;
+}
+
+void FocusOnWindow() noexcept
+{
+    HWND consoleWindow = GetConsoleWindow();
+
+    if (consoleWindow)
+    {
+        SetForegroundWindow(consoleWindow);
+        SetFocus(consoleWindow);
+    }
 }
