@@ -1,7 +1,8 @@
 set(OUT_FILE_NAME ConsoleTimer)
 
 set(SOURCES Main.cpp
-    OutputColorizer/Colorizer.cpp)
+    OutputColorizer/Colorizer.cpp
+    Timer/Timer.cpp)
 
 add_executable(${OUT_FILE_NAME})
 
