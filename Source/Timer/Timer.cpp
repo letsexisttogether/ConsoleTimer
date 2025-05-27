@@ -4,17 +4,29 @@ Timer::Timer(const Duration duration) noexcept
     : m_Duration{ duration }
 {}
 
+double Timer::GetTimeLeft() const noexcept
+{
+    const Duration timePassed = Clock::now() - m_Start;
+
+    return Duration{ m_Duration - timePassed }.count();
+}
+
+bool Timer::IsTimePassed() const noexcept
+{
+    return GetTimeLeft() <= 0.0;
+}
 
 void Timer::Reset() noexcept
 {
     m_Start = Clock::now();
 }
 
-bool Timer::IsTimePassed() const noexcept
+Timer::Clock::time_point Timer::GetStartTime() const noexcept
 {
-    const Clock::time_point now{ Clock::now() };
+    return m_Start;
+}
 
-    const Duration timePassed = now - m_Start;
-
-    return timePassed > m_Duration;
+Timer::Duration Timer::GetDuration() const noexcept
+{
+    return m_Duration;
 }

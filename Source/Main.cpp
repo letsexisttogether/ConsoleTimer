@@ -1,12 +1,10 @@
 #include <iostream>
-#include <chrono>
+#include <cmath>
     
 #include "OutputColorizer/Colorizer.hpp"
+#include "Timer/Timer.hpp"
 
 using namespace std::chrono_literals;
-
-using Clock = std::chrono::high_resolution_clock;
-using Duration = std::chrono::duration<double>;
 
 std::int32_t main(std::int32_t argc, char** argv)
 {
@@ -35,33 +33,23 @@ std::int32_t main(std::int32_t argc, char** argv)
         return EXIT_FAILURE;
     }
 
-    const Duration endTime{ timeInSeconds };
-    const Duration printTime{ printTimeInSeconds };
+    Timer mainTimer{ Timer::Duration{ timeInSeconds } };
+    Timer printTimer{ Timer::Duration{ printTimeInSeconds } };
 
-    const Clock::time_point start{ Clock::now() };
-    Clock::time_point lastPrintTime{ start };
+    std::cout << mainTimer.GetDuration().count() << "s\n";
 
-    std::cout << endTime.count() << "s\n";
-
-    while (true)
+    while (!mainTimer.IsTimePassed())
     {
-        const Clock::time_point now{ Clock::now() };
-
-        const Duration passedTime{ now - start };
-        const Duration passedPrintTime{ now - lastPrintTime };
-
-        if (passedPrintTime > printTime)
+        if (printTimer.IsTimePassed())
         {
-            std::cout << Duration{ endTime - passedTime }
-                .count() << "s\n";
+            const double truncatedTime = 
+                std::ceil(mainTimer.GetTimeLeft());
 
-            lastPrintTime = now;
+            std::cout << truncatedTime << "s\n";
+
+            printTimer.Reset();
         }
 
-        if (passedTime > endTime)
-        {
-            break;
-        }
     }
 
     std::cout << StandardColorizer;

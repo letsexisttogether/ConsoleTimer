@@ -17,9 +17,15 @@ public:
 
     ~Timer() = default;
 
-    void Reset() noexcept;
+    // NOTE: double for now, it will be chaned somewhen
+    double GetTimeLeft() const noexcept;
 
     bool IsTimePassed() const noexcept;
+
+    void Reset() noexcept;
+
+    Clock::time_point GetStartTime() const noexcept;
+    Duration GetDuration() const noexcept;
 
     Timer& operator = (const Timer&) = default;
     Timer& operator = (Timer&&) = default;
