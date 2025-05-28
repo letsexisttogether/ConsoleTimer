@@ -1,3 +1,4 @@
+#include <cstdio>
 #include <iostream>
 #include <cmath>
     
@@ -5,9 +6,18 @@
 #include "Timer/Timer.hpp"
 
 void FocusOnWindow() noexcept;
+BOOL WINAPI HandleCtrlC(const DWORD ctrlType) noexcept;
 
 std::int32_t main(std::int32_t argc, char** argv)
 {
+    if (!SetConsoleCtrlHandler(HandleCtrlC, TRUE))
+    {
+        std::cerr << RedColorizer << "[Error] Cannot setup the CTRL handler"
+            << StandardColorizer << std::endl;
+
+        return EXIT_FAILURE;
+    }
+
     std::cout << LightAquaColorizer << "Hello, ConsoleTimer"
         << YellowColorizer << '\n';
 
@@ -53,7 +63,10 @@ std::int32_t main(std::int32_t argc, char** argv)
     }
 
     FocusOnWindow();
-    std::cout << StandardColorizer;
+
+    std::cout << LightAquaColorizer << "Time is over\n"
+        << "Press Enter to exit" << StandardColorizer;
+    std::getchar();
 
     return EXIT_SUCCESS;
 }
@@ -67,4 +80,14 @@ void FocusOnWindow() noexcept
         SetForegroundWindow(consoleWindow);
         SetFocus(consoleWindow);
     }
+}
+
+BOOL WINAPI HandleCtrlC(const DWORD ctrlType) noexcept
+{
+    if (ctrlType == CTRL_C_EVENT)
+    {
+        std::cout << StandardColorizer;
+    }
+
+    return FALSE;
 }
